@@ -13,12 +13,18 @@ def student_exists(student_id):
 def add_student():
     student_id = input("Enter student ID: ")
 
+
     if student_exists(student_id):
         print("Student already exists!")
         return
 
     name = input("Enter student name: ")
     department = input("Enter department: ")
+
+    if student_id == "" or name == "" or department == "":
+        print("All fields are required!")
+        return
+
 
     with open("students.csv", "a") as file:
         file.write(f"\n{student_id},{name},{department}")
@@ -43,7 +49,18 @@ def mark_attendance():
         return
 
     today = date.today()
-    status = input("Enter status (Present/Absent): ")
+    with open("attendance.csv", "r") as file:
+        for line in file:
+            if f"{student_id},{today}" in line:
+                print("Attendance already marked for today!")
+                return
+
+    status = input("Enter status (Present/Absent): ").strip().capitalize()
+
+    if status not in ["Present", "Absent"]:
+        print("Invalid status! Please enter Present or Absent only.")
+        return
+
 
     with open("attendance.csv", "a") as file:
         file.write(f"\n{student_id},{today},{status}")
@@ -61,6 +78,9 @@ def view_attendance():
 def view_attendance_by_date():
     search_date = input("Enter date (YYYY-MM-DD): ")
     print("\n--- Attendance on", search_date, "---")
+    print("\nID | Date | Status")
+    print("-" * 25)
+
 
     with open("attendance.csv", "r") as file:
         for line in file:
