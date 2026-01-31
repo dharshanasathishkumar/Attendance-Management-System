@@ -1,18 +1,6 @@
 from datetime import date
-def add_student():
-    student_id = input("Enter student ID: ")
 
-    if student_exists(student_id):
-        print("Student already exists!")
-        return
-    
-    name = input("Enter student name: ")
-    department = input("Enter department: ")
-
-    with open("students.csv", "a") as file:
-        file.write(f"\n{student_id},{name},{department}")
-
-    print("Student added successfully!")
+# ---------------- STUDENT FUNCTIONS ----------------
 
 def student_exists(student_id):
     with open("students.csv", "r") as file:
@@ -22,6 +10,22 @@ def student_exists(student_id):
     return False
 
 
+def add_student():
+    student_id = input("Enter student ID: ")
+
+    if student_exists(student_id):
+        print("Student already exists!")
+        return
+
+    name = input("Enter student name: ")
+    department = input("Enter department: ")
+
+    with open("students.csv", "a") as file:
+        file.write(f"\n{student_id},{name},{department}")
+
+    print("Student added successfully!")
+
+
 def view_students():
     with open("students.csv", "r") as file:
         print("\n--- Student List ---")
@@ -29,8 +33,15 @@ def view_students():
             print(line.strip())
 
 
+# ---------------- ATTENDANCE FUNCTIONS ----------------
+
 def mark_attendance():
     student_id = input("Enter student ID: ")
+
+    if not student_exists(student_id):
+        print("Student not found!")
+        return
+
     today = date.today()
     status = input("Enter status (Present/Absent): ")
 
@@ -39,36 +50,54 @@ def mark_attendance():
 
     print("Attendance marked successfully!")
 
+
 def view_attendance():
     with open("attendance.csv", "r") as file:
         print("\n--- Attendance Records ---")
         for line in file:
             print(line.strip())
 
+
+def view_attendance_by_date():
+    search_date = input("Enter date (YYYY-MM-DD): ")
+    print("\n--- Attendance on", search_date, "---")
+
+    with open("attendance.csv", "r") as file:
+        for line in file:
+            if search_date in line:
+                print(line.strip())
+
+
+# ---------------- MAIN MENU ----------------
+
 def main():
     while True:
-        print("\n Attendance Management System")
+        print("\nAttendance Management System")
         print("1. Add Student")
         print("2. Mark Attendance")
         print("3. View Attendance")
         print("4. View Students")
-        print("5. Exit")
+        print("5. View Attendance by Date")
+        print("6. Exit")
 
-        choice=input("Enter Choice:")
+        choice = input("Enter Choice: ")
+
         if choice == "1":
             add_student()
         elif choice == "2":
-           mark_attendance()
+            mark_attendance()
         elif choice == "3":
             view_attendance()
         elif choice == "4":
             view_students()
         elif choice == "5":
+            view_attendance_by_date()
+        elif choice == "6":
             print("Exiting...")
             break
         else:
             print("Invalid choice")
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
