@@ -1,3 +1,8 @@
+from db import create_tables
+from db import get_connection
+
+create_tables()
+
 from flask import Flask, render_template, request, redirect
 app = Flask(__name__)
 @app.route("/")
@@ -24,32 +29,51 @@ def view_students():
 
 
 def student_exists(student_id):
-    with open("students.csv", "r") as file:
-        for line in file:
-            if line.startswith(student_id + ","):
-                return True
-    return False
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT 1 FROM students WHERE id = ?", (student_id,))
+    exists = cursor.fetchone() is not None
+
+    conn.close()
+    return exists
+
 
 def add_student(student_id, name, department):
     if student_exists(student_id):
         return "exists"
 
-    with open("students.csv", "a") as file:
-        file.write(f"{student_id},{name},{department}\n")
+    conn = get_connection()
+    cursor = conn.cursor()
 
+    cursor.execute(
+        "INSERT INTO students (id, name, department) VALUES (?, ?, ?)",
+        (student_id, name, department)
+    )
+
+    conn.commit()
+    conn.close()
     return "added"
+
 def get_all_students():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT id, name, department FROM students")
+    rows = cursor.fetchall()
+
+    conn.close()
+
     students = []
-    with open("students.csv", "r") as file:
-        for line in file:
-            data = line.strip().split(",")
-            if len(data) == 3:
-                students.append({
-                    "id": data[0],
-                    "name": data[1],
-                    "department": data[2]
-                })
+    for row in rows:
+        students.append({
+            "id": row[0],
+            "name": row[1],
+            "department": row[2]
+        })
+
     return students
+
 
 
 
