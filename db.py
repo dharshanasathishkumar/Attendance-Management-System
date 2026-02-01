@@ -1,7 +1,12 @@
 import sqlite3
 
 def get_connection():
-    return sqlite3.connect("attendance.db")
+    conn = sqlite3.connect("attendance.db")
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
+
+
 
 def create_tables():
     conn = get_connection()
