@@ -1,3 +1,6 @@
+import os
+print("Running from:", os.getcwd())
+
 from datetime import date
 
 # ---------------- STUDENT FUNCTIONS ----------------
@@ -46,7 +49,7 @@ def mark_attendance():
     status = input("Enter status (Present/Absent): ")
 
     with open("attendance.csv", "a") as file:
-        file.write(f"\n{student_id},{today},{status}")
+        file.write(f"{student_id},{today},{status}\n")
 
     print("Attendance marked successfully!")
 
