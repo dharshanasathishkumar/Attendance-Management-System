@@ -33,5 +33,24 @@ def create_tables():
     conn.commit()
     conn.close()
 
+def mark_attendance(student_id, date, status):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO attendance (student_id, date, status) VALUES (?, ?, ?)",
+        (student_id, date, status)
+    )
+    conn.commit()
+    conn.close()
+def get_attendance():
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM attendance")
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
+
+
 if __name__ == "__main__":
     create_tables()

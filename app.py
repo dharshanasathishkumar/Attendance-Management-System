@@ -5,9 +5,13 @@ create_tables()
 
 from flask import Flask, render_template, request, redirect
 app = Flask(__name__)
+
+
+
 @app.route("/")
 def home():
     return render_template("index.html")
+
 
 @app.route("/add-student", methods=["GET", "POST"])
 def add_student_page():
@@ -26,6 +30,22 @@ def add_student_page():
 def view_students():
     students = get_all_students()
     return render_template("students.html", students=students)
+
+@app.route("/attendance", methods=["GET", "POST"])
+def attendance_page():
+    if request.method == "POST":
+        student_id = request.form["student_id"]
+        date = request.form["date"]
+        status = request.form["status"]
+
+        mark_attendance(student_id, date, status)
+        return redirect("/attendance")
+
+    records = get_attendance()
+    return render_template("attendance.html", records=records)
+
+
+
 
 
 def student_exists(student_id):
@@ -73,6 +93,33 @@ def get_all_students():
         })
 
     return students
+
+def get_attendance():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT student_id, date, status
+        FROM attendance
+    """)
+
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
+def mark_attendance(student_id, date, status):
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "INSERT INTO attendance (student_id, date, status) VALUES (?, ?, ?)",
+        (student_id, date, status)
+    )
+
+    conn.commit()
+    conn.close()
+
+
 
 
 
