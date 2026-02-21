@@ -1,7 +1,6 @@
-from db import create_tables
+
 from db import get_connection
 
-create_tables()
 
 from flask import Flask, render_template, request, redirect
 app = Flask(__name__)
@@ -52,7 +51,7 @@ def student_exists(student_id):
     conn = get_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT 1 FROM students WHERE id = ?", (student_id,))
+    cursor.execute("SELECT 1 FROM students WHERE id = %s", (student_id,))
     exists = cursor.fetchone() is not None
 
     conn.close()
@@ -67,7 +66,7 @@ def add_student(student_id, name, department):
     cursor = conn.cursor()
 
     cursor.execute(
-        "INSERT INTO students (id, name, department) VALUES (?, ?, ?)",
+        "INSERT INTO students (id, name, department) VALUES (%s,%s,%s)",
         (student_id, name, department)
     )
 
