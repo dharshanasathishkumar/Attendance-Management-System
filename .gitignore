@@ -4,8 +4,9 @@ __pycache__/
 
 #local dbs and csv files
 *.db
-students.csv
 attendance.csv
+students.csv
+
 
 #environment variables
 .env
