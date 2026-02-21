@@ -1,25 +1,48 @@
 # Attendance Management System
 
 ## Project Overview
-The Attendance Management System is a straightforward application created with Python to effectively handle student attendance. It enables users to input student information, record attendance, and access attendance logs, utilizing CSV files for data storage.
 
-This project was designed as an entry-level, resume-enhancing software project, employing fundamental programming principles and collaboration on GitHub.
+The Attendance Management System is a web-based application built using Python and Flask to effectively manage student attendance records. 
+It uses a centralized MySQL database for reliable data storage and retrieval. 
+This project is designed for academic submission and demonstrates backend development, database integration, and version control.
 
 ## Features
-- Input student information
+
+- Add and view students
 - Record daily attendance
-- Utilize CSV files for data storage
-- User-friendly menu-driven interface
+- Centralized MySQL database storage
+- Web-based interface using Flask
 - Collaborative development via GitHub
 
 ## Technologies Used
+
 - Python
-- CSV (for data storage)
+- Flask
+- MySQL
 - Git & GitHub
 
-## How to Run the Project
-1. Clone the repository
-2. Open the project folder
-3. Run the following command:
+## Environment Setup
+
+1. Install dependencies
 ```bash
-python main.py
+pip install -r requirements.txt
+```
+2. Using a virtual environment is recommended but not mandatory.
+```bash
+python -m venv venv
+venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+```
+
+## Environment Variables
+Create a `.env` file in the project root (do not push this file to Git)
+
+A reference file `.env.example` is included for guidance.
+
+
+## How to Run the Project
+```bash
+python app.py
+```
+
+
